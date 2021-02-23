@@ -23,12 +23,15 @@ const useBookSearch = (query, pageNumber) => {
           cancelToken: new axios.CancelToken((c) => (cancel = c)),
         });
 
-        setBooks((books) => [...response.data.docs.map((doc) => doc.title)]);
+        setBooks((books) => [
+          ...books,
+          ...response.data.docs.map((doc) => doc.title),
+        ]);
 
         setLoading(false);
 
         setHasMore(books.length > 0);
-        // return response.data;
+        console.log(response.data.docs[response.data.docs.length - 1]);
       } catch (e) {
         if (axios.isCancel(e)) return;
         setError(true);
@@ -36,7 +39,6 @@ const useBookSearch = (query, pageNumber) => {
     };
 
     tryUseEffect();
-    console.log(books);
 
     return () => cancel();
   }, [query, pageNumber]);
